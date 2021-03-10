@@ -1,0 +1,40 @@
+.div{
+    margin-top: 80px;
+    direction: rtl;
+    font-family: IRANSans;
+  }
+
+  .cntr{    
+    position: absolute;
+    top: 35%;
+    left: 35%;
+    margin-top: -50px;
+    margin-left: -50px;
+    right: 35%;
+  }
+  
+  .submitButton{
+    margin-right: 5px;
+    width: 120px;
+    font-family: IRANSans;
+  }
+  
+  .sectionForm{
+    border: 1px solid #f7f7f7;
+    box-shadow: 30px 30px 15px 7px #f0efef;
+    background-color: #f7f7f7;
+    font-family: IRANSans;
+    padding: 40px;
+  }
+  
+  @font-face {
+    font-family: 'IRANSans';
+    src: local('IRANSans'), url(../../../assets/fonts/IRANSans.ttf) format('truetype');
+  }
+  
+  hr{
+    width: 75%;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 3px 0px gray;
+    color: #f7f7f7;
+  }

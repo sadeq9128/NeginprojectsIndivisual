@@ -1,0 +1,72 @@
+  @font-face {
+    font-family: 'IRANSans';
+    src: local('IRANSans'), url(../../../assets/fonts/IRANSans.ttf) format('truetype');
+  }
+  .div{
+    text-align: center;
+    direction: rtl;
+    font-family: IRANSans;
+  }
+
+.editable-row  ant-form-item-explain {
+    position: absolute;
+    top: 100%;
+    font-size: 8px;
+  }
+
+.ant-table table{
+  font-family: IRANSans;
+  font-size: 10px;
+}
+.ant-table-thead{
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+}
+.ant-table-thead th{
+  text-align: center;
+}
+
+.ant-table-cell{
+  text-align: center !important;
+  height: 15px;
+}
+
+.ant-table thead .ant-table-thead{
+  background-color: darkblue;
+}
+
+.ant-input-number-input{
+  font-family: IRANSans;
+  font-size: 8px;
+}
+
+.ant-input-number{
+  width: initial;
+}
+
+.ant-input-number-handler-wrap{
+  width: 10px !important;
+}
+
+.ant-table-selection-col{
+  width: 2%;
+}
+.ant-table .ant-table-selection-col{
+  width: 2%;
+}
+
+.ant-select-selection-item{
+  
+  font-family: IRANSans;
+  font-size: 8px;
+}
+
+.ant-select-item-option-content{
+  
+  font-family: IRANSans;
+  font-size: 8px;
+}
+
+.ant-select-dropdown{
+  width: min-content !important;
+}

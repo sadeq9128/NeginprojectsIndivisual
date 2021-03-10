@@ -1,0 +1,44 @@
+.trigger {
+    padding: 0 24px;
+    font-size: 18px;
+    line-height: 64px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .trigger:hover {
+    color: #1890ff;
+  }
+  
+  .logo {
+    height: 32px;
+    margin: 16px;
+    background: rgb(245, 245, 245);
+  }
+  
+  .site-layout .site-layout-background {
+    background: #fff;
+  }
+
+  .content{
+    height: min-content;
+    margin-right: 200px;
+    font-family: IRANSans;
+  }
+
+  .slider{
+    max-width: 200px;
+    min-width: 200px;
+    width: 200px;
+    position: fixed;
+    height: 100%;
+    top: 0px;
+    right: 0px;
+    z-index: 1;
+    font-family: IRANSans;
+  }
+
+  @font-face {
+    font-family: 'IRANSans';
+    src: local('IRANSans'), url(../../assets/fonts/IRANSans.ttf) format('truetype');
+  }

@@ -1,0 +1,10 @@
+.div{
+    text-align: center;
+    direction: rtl;
+    font-family: IRANSans;
+  }
+  
+  @font-face {
+    font-family: 'IRANSans';
+    src: local('IRANSans'), url(../../assets/fonts/IRANSans.ttf) format('truetype');
+  }

@@ -1,14 +1,21 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './containers/main/App';
 import reportWebVitals from './reportWebVitals';
+import {BrowserRouter} from "react-router-dom";
+import 'antd/dist/antd.css';
+import { ConfigProvider } from 'antd';
+
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <ConfigProvider direction="rtl">
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </ConfigProvider>,
+  document.getElementById('container')
 );
 
 // If you want to start measuring performance in your app, pass a function
