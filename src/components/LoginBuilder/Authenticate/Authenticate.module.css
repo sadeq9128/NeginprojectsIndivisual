@@ -1,7 +1,7 @@
 .div{
     margin-top: 80px;
     direction: rtl;
-    font-family: IRANSans;
+    font-family: iranyekanwebmediumfanum;
   }
 
   .cntr{    
@@ -16,14 +16,14 @@
   .submitButton{
     margin-right: 5px;
     width: 120px;
-    font-family: IRANSans;
+    font-family: iranyekanwebmediumfanum;
   }
   
   .sectionForm{
     border: 1px solid #f7f7f7;
     box-shadow: 30px 30px 15px 7px #f0efef;
     background-color: #f7f7f7;
-    font-family: IRANSans;
+    font-family: iranyekanwebmediumfanum;
     padding: 40px;
   }
   

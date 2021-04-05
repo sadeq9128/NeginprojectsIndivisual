@@ -158,7 +158,6 @@ const NewToolsForm=(props)=>{
     const dateValidation=(e)=>{
         console.log(validator.isDate(e.target.value));
         if (!validator.isDate(e.target.value)) { 
-            console.log("yjc");
             form.setFields([
                 {
                     name: "register_date",

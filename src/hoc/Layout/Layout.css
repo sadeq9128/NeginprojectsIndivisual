@@ -23,7 +23,8 @@
   .content{
     height: min-content;
     margin-right: 200px;
-    font-family: IRANSans;
+    font-family: iranyekanwebmediumfanum;
+    background-image: url(../../assets/back.jpg);
   }
 
   .slider{
@@ -35,10 +36,10 @@
     top: 0px;
     right: 0px;
     z-index: 1;
-    font-family: IRANSans;
+    font-family: iranyekanwebmediumfanum;
   }
 
   @font-face {
-    font-family: 'IRANSans';
-    src: local('IRANSans'), url(../../assets/fonts/IRANSans.ttf) format('truetype');
+    font-family: 'iranyekanwebmediumfanum';
+    src: local('iranyekanwebmediumfanum'), url(../../assets/fonts/iranyekanwebmediumfanum.ttf) format('truetype');
   }

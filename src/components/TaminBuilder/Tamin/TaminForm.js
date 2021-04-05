@@ -147,6 +147,7 @@ const NewToolsForm=(props)=>{
                         >
                         <InputNumber style={{width:"100%"}}
                             disabled={sendingStatus}
+                            
                             min={1}
                             max={12}
                             onChange={e=>monthControler(e)}
@@ -179,7 +180,7 @@ const NewToolsForm=(props)=>{
                                 mask="111" />
 {/*                                 
                         <InputNumber disabled={sendingStatus}
-                            defaultValue={"001"}
+                            initialValues={"001"}
                             min={1}
                             // onChange={}
                             /> */}
@@ -231,7 +232,7 @@ const NewToolsForm=(props)=>{
                         }
                     ]}
                 >
-                <Input disabled={sendingStatus}/>
+                <Input disabled={sendingStatus} />
                 </Form.Item>
             </Col>
             <Col span={12}>

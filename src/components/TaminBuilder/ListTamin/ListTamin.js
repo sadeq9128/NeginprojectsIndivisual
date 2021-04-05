@@ -1,7 +1,11 @@
 import React, { useState,useEffect } from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Typography, message, Select } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form, message,Button, Select } from 'antd';
 import "./ListTamin.css";
 import axios from "../../../axios";
+import {useHistory,Route,Redirect } from "react-router-dom";
+import {
+  EditTwoTone,CheckCircleTwoTone,CloseCircleTwoTone,SettingTwoTone
+} from '@ant-design/icons';
 
 
 let originData = [];
@@ -21,7 +25,7 @@ const EditableCell = ({
   var inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
   if(inputType === 'select'){
     inputNode=
-    <Select defaultValue="">
+    <Select initialValues="">
         <Select.Option value="تایید نهایی - ارسال در مهلت قانونی از طریق سایت">
         تایید نهایی - ارسال در مهلت قانونی از طریق سایت
         </Select.Option>
@@ -109,6 +113,15 @@ const EditableTable = () => {
     setEditingKey(record.id);
   };
 
+  
+  const AddPerson = (record) => {
+    console.log(record.month);
+      history.push({ 
+        pathname: '/dashboard/addperson',
+        state: { month: record.month,  year: record.year,  insurance_id: record.id }
+    });
+  };
+
   const cancel = () => {
     setEditingKey('');
   };
@@ -160,6 +173,26 @@ const EditableTable = () => {
       console.log('Validate Failed:', errInfo);
     }
   };
+
+  const deleteItems=()=>{
+    
+    let value={data:{"ids" : select.selectedRowKeys}}
+    axios.delete("/insurance/tamin",value)
+    .then( response => {
+        console.log(originData);
+        console.log("با موفقیت انجام شد");
+    } )
+    .catch( error => {
+        message.error("حذف انجام نشد.");
+        console.log(error);
+    } );
+    return;
+  }
+
+  let history = useHistory();
+  const createItem=()=>{
+    history.push('/dashboard/tamin');
+  }
   
 
   const rowSelection = {
@@ -221,7 +254,13 @@ const EditableTable = () => {
       dataIndex: 'total_insured',
       width: '10%',
       editable: true,
-      key: 'total_insured',
+      render: (_,record) => { 
+        if (record.total_insured===null)
+          return "";
+        return (
+        <span>{record.total_insured.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+         )
+      }
     },
     {
       title: 'وضعیت',
@@ -232,30 +271,31 @@ const EditableTable = () => {
     },
     {
       title: 'ابزارها',
-      width: '8%',
+      width: '6%',
       dataIndex: 'operation',
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (
           <span>
-            <a
+            <CheckCircleTwoTone
+              twoToneColor="#52c41a" 
+              style={{fontSize: '18px'}}
               href="javascript:;"
               onClick={() => save(record.id)}
             >
                اعمال 
-            </a>
+            </CheckCircleTwoTone>
             <Popconfirm okText="بله" cancelText="خیر" title="لغو شود؟" onConfirm={cancel}>
-              <a> لغو </a>
+            <CloseCircleTwoTone twoToneColor="#eb2f96" style={{marginRight:"10px", fontSize: '18px'}}> لغو </CloseCircleTwoTone>
             </Popconfirm>
           </span>
         ) : (
           <span>
-            <Typography.Link style={{marginLeft:"5px"}} disabled={editingKey !== ''} onClick={() => edit(record,1)}>
+            {/* <Typography.Link style={{marginLeft:"5px"}} disabled={editingKey !== ''} onClick={() => edit(record,1)}>
               ویرایش  
-            </Typography.Link>
-            <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record,2)}>
-                حذف
-            </Typography.Link>
+            </Typography.Link> */}
+            <EditTwoTone style={{marginLeft:"5px", fontSize: '18px'}} disabled={editingKey !== ''} onClick={() => edit(record,1)}/>
+            <SettingTwoTone style={{marginRight:"5px", fontSize: '16px'}} disabled={editingKey !== ''} onClick={() => AddPerson(record)}/>
           </span>
         );
       },
@@ -292,7 +332,13 @@ const EditableTable = () => {
   
   return (
     <Form form={form} component={false}>
-      <Table
+    <Button disabled={select.selectedRowKeys.length===0} onClick={deleteItems} className={"submitButton"} type="primary">
+        حذف
+    </Button>
+    <Button  onClick={createItem} className={"submitButton"} type="primary">
+        ایجاد
+    </Button>
+      <Table className={"listform"}
         components={{
           body: {
             cell: EditableCell,

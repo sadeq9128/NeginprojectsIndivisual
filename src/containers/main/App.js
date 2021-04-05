@@ -12,6 +12,7 @@ function App() {
           <Route exact path="/dashboard/hoghoghi"><SiderLayout keyitem="1"/></Route>
           <Route exact path="/dashboard/tamin"><SiderLayout keyitem="2"/></Route>
           <Route exact path="/dashboard/listtamin"><SiderLayout keyitem="3"/></Route>
+          <Route exact path="/dashboard/addperson"><SiderLayout keyitem="4"/></Route>
       </Switch>
   );
 }

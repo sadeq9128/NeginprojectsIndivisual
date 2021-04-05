@@ -1,7 +1,7 @@
 .div{
     margin-top: 80px;
     direction: rtl;
-    font-family: IRANSans;
+    font-family: iranyekanwebmediumfanum;
   }
 
   .cntr{    
@@ -16,20 +16,20 @@
   .submitButton{
     margin-left: 10px;
     width: 120px;
-    font-family: IRANSans;
+    font-family: iranyekanwebmediumfanum;
   }
   
   .sectionForm{
     border: 1px solid #f7f7f7;
     box-shadow: 30px 30px 15px 7px #f0efef;
     background-color: #f7f7f7;
-    font-family: IRANSans;
+    font-family: iranyekanwebmediumfanum;
     padding: 40px;
   }
   
   @font-face {
-    font-family: 'IRANSans';
-    src: local('IRANSans'), url(../../../assets/fonts/IRANSans.ttf) format('truetype');
+    font-family: 'iranyekanwebmediumfanum';
+    src: local('iranyekanwebmediumfanum'), url(../../../assets/fonts/iranyekanwebmediumfanum.ttf) format('truetype');
   }
   
   hr{

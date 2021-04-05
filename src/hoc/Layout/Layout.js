@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Link } from "react-router-dom";
 import NewTools from "../../components/HoghoghiBuilder/NewTools/NewTools";
 import TaminBuilder from "../../components/TaminBuilder/TaminBuilder";
 import listtamin from "../../components/TaminBuilder/ListTamin/ListTamin";
+import AddPersonBuilder from "../../components/AddPerson/AddPersonBuilder";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -45,7 +46,7 @@ class SiderLayout extends Component {
   
     return (
       <Router>
-      <Layout style={{height: "inherit"}}>
+      <Layout style={{height: "auto"}}>
         <Sider className="slider" trigger={null} collapsible collapsed={this.state.collapsed}>
           <h3 className="logo">داشبورد</h3>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={this.props.keyitem} >
@@ -61,9 +62,13 @@ class SiderLayout extends Component {
               لیست تامین اجتماعی
               <Link to="/dashboard/listtamin" />
             </Menu.Item>
+            <Menu.Item key="4" icon={<UploadOutlined />}>
+              اضافه کردن فرد
+              <Link to="/dashboard/addperson" />
+            </Menu.Item>
           </Menu>
         </Sider>
-        <Layout className="site-layout content">
+        <Layout className="site-layout content" style={{marginRight:this.state.collapsed ? "80px" : "200px"}}>
           <Header className="site-layout-background" style={{ padding: 0 }}>
             {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
               className: 'trigger',
@@ -81,6 +86,7 @@ class SiderLayout extends Component {
             <Route path="/dashboard/hoghoghi" component={NewTools}/>
             <Route path="/dashboard/tamin" component={TaminBuilder}/>
             <Route path="/dashboard/listtamin" component={listtamin}/>
+            <Route path="/dashboard/addperson" component={AddPersonBuilder}/>
           </Content>
         </Layout>
       </Layout>

@@ -1,16 +1,13 @@
-.div{
+@font-face {
+    font-family: 'iranyekanwebmediumfanum';
+    src: local('iranyekanwebmediumfanum'), url(../../../assets/fonts/iranyekanwebmediumfanum.ttf) format('truetype');
+  }
+  .div{
     text-align: center;
     direction: rtl;
     font-family: iranyekanwebmediumfanum;
   }
-  
-  .progress{
-    text-align: center !important;
-    width: 80px;
-    height: 5px !important;
-    display: inline-block;
-  }
-  
+
   .submitButton{
     margin-left: 10px;
     width: 120px;
@@ -60,12 +57,6 @@
   }
   
   .dateButton{
-    margin-bottom: 23px !important;
+    margin-bottom: 24px !important;
   }
   
-  hr{
-    width: 75%;
-    margin-bottom: 20px;
-    box-shadow: 0px 2px 3px 0px gray;
-    color: #f7f7f7;
-  }
