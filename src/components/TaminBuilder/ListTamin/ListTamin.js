@@ -1,15 +1,18 @@
 import React, { useState,useEffect } from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, message,Button, Select } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form, message,Button, Select, Space } from 'antd';
 import "./ListTamin.css";
 import axios from "../../../axios";
 import {useHistory,Route,Redirect } from "react-router-dom";
 import {
   EditTwoTone,CheckCircleTwoTone,CloseCircleTwoTone,SettingTwoTone
 } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
+const { Search } = Input;
 
 
 let originData = [];
-
+let oldWord='';
 
 const EditableCell = ({
   editing,
@@ -77,6 +80,10 @@ const EditableTable = () => {
   const [select, setSelect] = useState({
     selectedRowKeys: [],
   });
+  const [searchText,setSearchText]=useState('');
+  const [searchedColumn,setSearchedColumn]=useState('');
+  const [searching,setSearching]=useState(false);
+  
 
   axios.defaults.headers.common = {'Authorization':localStorage.getItem("token")};
 
@@ -206,6 +213,78 @@ const EditableTable = () => {
     },
   };
 
+
+ const getColumnSearchProps = dataIndex => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Search
+          ref={node => {
+            //this.searchInput = node;
+          }}
+          placeholder={`جستجوی وضعیت`}
+          value={selectedKeys[0]}
+          //onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onChange={e => handleSearch(setSelectedKeys,selectedKeys,e, ()=>confirm({ closeDropdown: false }), dataIndex,clearFilters)}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          loading={searching}
+
+        />
+        
+      </div>
+    ),
+    filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+        : '',
+    onFilterDropdownVisibleChange: visible => {
+      if (visible) {
+        //setTimeout(() => this.searchInput.select(), 100);
+      }
+    },
+    render: text =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  const handleSearch = (setSelectedKeys,selectedKeys,e, confirm, dataIndex,clearFilters) => {
+
+    if(e.target===undefined)return;
+    oldWord=e.target.value;
+    setSearching(true);
+    setSelectedKeys(e.target.value ? [e.target.value] : []);
+    setTimeout(() => {    
+      if(oldWord.length===1){
+        confirm();
+        setSearchText(e.target.value);
+        setSearchedColumn(dataIndex);
+      }else if(oldWord===e.target.value){
+        confirm();
+        setSelectedKeys(e.target.value ? [e.target.value] : []);
+        setSearchText(e.target.value);
+        setSearchedColumn(dataIndex);
+      }
+      else{
+        clearFilters();
+      }
+      setSearching(false);
+    },500);
+  };
+
+  const handleReset = clearFilters => {
+    clearFilters();
+    setSearchText('');
+  };
+
+
   const columns = [
     {
       title: 'کد کارگاهی',
@@ -241,6 +320,7 @@ const EditableTable = () => {
       width: '8%',
       editable: true,
       key: 'list_number',
+      ...getColumnSearchProps('list_number'),
     },
     {
       title: 'تعداد نفرات',
@@ -268,6 +348,7 @@ const EditableTable = () => {
       width: '25%',
       editable: true,
       key: 'status',
+      ...getColumnSearchProps('status'),
     },
     {
       title: 'ابزارها',

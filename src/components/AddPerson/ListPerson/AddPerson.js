@@ -244,7 +244,13 @@ const EditableTable = () => {
 
   };
 
-  
+  const confirmDelete=(record)=>{
+    
+    form.setFieldsValue({
+      ...record,
+    });
+    setEditingKey(record.id);
+  }
   const DeletePerson = (record) => {
     
     let value={data:{"ids" : [record.id]}}
@@ -434,34 +440,29 @@ const EditableTable = () => {
       dataIndex: 'insurance_number',
       key: 'insurance_number',
       width: '7%',
-      editable: true,
     },
     {
       title: 'نام',
       dataIndex: 'first_name',
       key: 'first_name',
       width: '7%',
-      editable: true,
     },
     {
       title: 'نام خانوادگی',
       dataIndex: 'last_name',
       key: 'last_name',
       width: '10%',
-      editable: true,
     },
     {
       title: 'روز کارکرد',
       dataIndex: 'total_work_day',
       width: '5%',
-      editable: true,
       key: 'total_work_day',
     },
     {
       title: 'دستمزد روزانه',
       dataIndex: 'daily_salary',
       width: '8%',
-      editable: true,
       key: 'daily_salary',
       render: (_,record) => { try{
         if (record.daily_salary===null)
@@ -476,7 +477,6 @@ const EditableTable = () => {
       title: 'مزایای مشمول',
       dataIndex: 'include_benefit',
       width: '8%',
-      editable: true,
       key: 'include_benefit',
       render: (_,record) => { try{
         if (record.include_benefit===null)
@@ -491,7 +491,6 @@ const EditableTable = () => {
       title: 'دستمزد مشمول',
       dataIndex: 'salary_benefit_include',
       width: '10%',
-      editable: true,
       key: 'salary_benefit_include',
       render: (_,record) => { try{
         if (record.salary_benefit_include===null)
@@ -507,7 +506,6 @@ const EditableTable = () => {
       dataIndex: 'salary_benefit_include_notinclude',
       key:'salary_benefit_include_notinclude',
       width: '15%',
-      editable: true,
       render: (_,record) => { try{
         if (record.salary_benefit_include_notinclude===null)
           return "";
@@ -521,18 +519,32 @@ const EditableTable = () => {
       title: 'شغل',
       dataIndex: 'job_id_fk',
       width: '10%',
-      editable: true,
       key: 'job_id_fk',
     },
     {
       title: 'ابزارها',
       width: '6%',
       dataIndex: 'operation',
-      render: (_, record) => {
-        return(
+      render: (_, record) => {const editable = isEditing(record);
+        return editable ? (
+          <span>
+            <CheckCircleTwoTone
+              twoToneColor="#52c41a" 
+              style={{fontSize: '18px'}}
+              href="javascript:;"
+              onClick={() => DeletePerson(record)}
+            >
+               اعمال 
+            </CheckCircleTwoTone>
+            <Popconfirm okText="بله" cancelText="خیر" title="لغو شود؟" onConfirm={cancel}>
+            <CloseCircleTwoTone twoToneColor="#eb2f96" style={{marginRight:"10px", fontSize: '18px'}}> لغو </CloseCircleTwoTone>
+            </Popconfirm>
+          </span>)
+          :
+          (
           <span>
             <EditTwoTone style={{marginLeft:"5px", fontSize: '18px'}} disabled={editingKey !== ''} onClick={() => edit(record,1)}/>
-            <DeleteTwoTone style={{marginRight:"5px", fontSize: '16px'}} disabled={editingKey !== ''} onClick={() => DeletePerson(record)}/>
+            <DeleteTwoTone style={{marginRight:"5px", fontSize: '16px'}} disabled={editingKey !== ''} onClick={() => confirmDelete(record)}/>
           </span>
         );
       },
