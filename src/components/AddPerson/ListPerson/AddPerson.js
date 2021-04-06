@@ -15,7 +15,7 @@ import MaskedInput from "antd-mask-input";
 
 const layout = {
   labelCol: {
-      span: 10,
+      span: 12,
   },
   wrapperCol: {
       span: 10,
@@ -107,35 +107,39 @@ const EditableTable = () => {
   const [startDate,setStartDate]=useState();
   const [totalWorkDay,setTWD]=useState();
   const [personnelId,setPersonel]=useState();
+  const [jobTitle,setJobTitle]=useState("انتخاب نشده");
+  const [jobId,setJobId]=useState(null);
+  const [jobStatus,setJobStatus]=useState(false);
   const [setting,setSetting]=useState();
   const [sdate,setSDATE]=useState();
   const [edate,setEDATE]=useState();
+  const [itemId,setItemId]=useState();
   const [changeForm,setChangeForm]=useState(false);
   const [minDailySalary,setMinDailySalary]=useState(0);
-  const [maxDailySalary,setMaxDailySalary]=useState(1);
+  const [maxDailySalary,setMaxDailySalary]=useState(10000000000);
 
   axios.defaults.headers.common = {'Authorization':localStorage.getItem("token")};
 
   useEffect(() => {
     
+    if(changeForm) return;
     axios.get("/insurance/tamin/persons/"+insuranceId)
             .then( response => {
                 originData=[...response.data];
                 setData(originData);
                 console.log(originData);
-                console.log("با موفقیت انجام شد");
+                console.log("لیست افراد دریافت شد");
             } )
             .catch( error => {
                 message.error("نتیجه ای یافت نشد.");
                 console.log(error);
             } );
-    console.log(!changeForm)
-    if(changeForm) return;
     axios.get("/admin/hr/variables/annual")
       .then( response => {
           setSetting(response.data[response.data.length-1]);
           setMinDailySalary(response.data[response.data.length-1]['min_daily_salary']);
           setMaxDailySalary(response.data[response.data.length-1]['max_daily_salary']);
+          formAddPerson.setFieldsValue({daily_salary:response.data[response.data.length-1]['min_daily_salary']});
           setChangeForm(true);
           console.log(response.data);
           console.log("تنظیمات گرفته شد");
@@ -154,16 +158,96 @@ const EditableTable = () => {
 
   const edit = (record,op) => {
     setSaveOP(op);
-    form.setFieldsValue({
-      ...record,
-    });
-    setEditingKey(record.id);
+    setSendingStatus(false);
+    setItemId(record.id);
+    message.info("اطلاعات کاربر جهت ویرایش آماده هستند");
+    try {
+      const newData = [...data];
+      const index = newData.findIndex((item) => record.id === item.id);
+
+      if (index > -1) {
+        const item = newData[index];
+        newData.splice(index, 1, { ...item});
+        setData(newData);
+        setEditingKey('');
+      } else {
+        setData(newData);
+        setEditingKey('');
+      }
+      let value={
+        "insurance_id" : insuranceId,
+        "national_id" : newData[index]['national_number'],
+        "start_date" : newData[index]['start_date'].split(" ")[0].replace("-","/").replace("-","/"),
+        "end_date" : newData[index]['end_date'].split(" ")[0].replace("-","/").replace("-","/"),
+        "total_work_day" : parseInt(newData[index]['total_work_day']),
+        "daily_salary": parseInt(newData[index]["daily_salary"]),
+        "monthly_salary" : parseInt(newData[index]['monthly_salary']),
+        "include_benefit" : parseInt(newData[index]['include_benefit']),
+        "salary_benefit_include" : parseInt(newData[index]["salary_benefit_include"]),
+        "salary_benefit_include_notinclude": parseInt(newData[index]["salary_benefit_include_notinclude"]),
+        "insured_share" : parseInt(newData[index]["insured_share"]),
+        "employer_share" : parseInt(newData[index]["employer_share"]),
+        "jobless_share" : parseInt(newData[index]["jobless_share"]),
+        "hard_job_share" : parseInt(newData[index]["hard_job_share"]),
+        "total_share" : parseInt(newData[index]['total_share']),
+        "job_id_fk" : newData[index]["job_id_fk"],
+        "desscription": "Updated"
+      };
+      setPersonel( newData[index]["id"])
+      setSDATE(value["start_date"]);
+      setEDATE(value["end_date"]);
+
+      console.log(value);
+      formAddPerson.setFieldsValue({...value});
+      value["start_date"]=newData[index]['start_date'];
+      value["end_date"]=newData[index]['end_date'];
+      delete value['national_id'];
+      axios.get( '/admin/personnel/lookup/'+newData[index]['national_number'] )
+          .then( response => {
+              setPersonel(response.data.id);
+              setPerson(response.data.first_name+" "+response.data.last_name);
+              if(response.data.job_id!==null){
+                setJobTitle(response.data.job_title);
+                // setJobId(response.data.job_id);
+                setJobStatus(true);
+              }
+              message.success("شخص مورد نظر یافت شد");
+              console.log("شخص مورد نظر یافت شد");
+          } )
+          .catch( error => {
+              setSendingStatus(true);
+              message.error("خطا در دریافت شخص");
+              console.log("خطا در دریافت شخص");
+          } );
+      value['personnel_id']=personnelId;
+      axios.get( '/jobtitle/'+newData[index]['job_id_fk'] )
+          .then( response => {
+              console.log(response.data);
+              setJobTitle(response.data.title);
+              setJobId(newData[index]['job_id_fk']);
+          } )
+          .catch( error => {
+            console.log("kan");
+            formAddPerson.setFields([
+                {
+                    name: "job_id_fk",
+                    errors: ["کد شغل نامعتبر است"]
+                }
+            ]);
+              message.error("کد شغل موجود نیست");
+              console.log("کد شغل موجود نیست");
+          } );
+
+    }catch(or){
+      console.log(or);
+    }
+
   };
 
   
   const DeletePerson = (record) => {
     
-    let value={data:{"ids" : record.id}}
+    let value={data:{"ids" : [record.id]}}
     console.log(value);
     axios.delete("/insurance/tamin/person",value)
     .then( response => {
@@ -172,6 +256,7 @@ const EditableTable = () => {
         });
         setData(originData);
         console.log(originData);
+        console.log(response);
         console.log("با موفقیت انجام شد");
     } )
     .catch( error => {
@@ -184,64 +269,6 @@ const EditableTable = () => {
   const cancel = () => {
     setEditingKey('');
   };
-
-  const save = async (key) => {
-    try {
-      console.log(key);
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.id);
-
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item});
-        setData(newData);
-        setEditingKey('');
-      } else {
-        setData(newData);
-        setEditingKey('');
-      }
-
-    let value={
-      "insurance_id" : insuranceId,
-      "personnel_id" : newData[index]['personnel_id_fk'],
-      "start_date" : newData[index]['start_date'],
-      "end_date" : newData[index]['end_date'],
-      "total_work_day" : newData[index]['total_work_day'],
-      "daily_salary": form.getFieldValue("daily_salary"),
-      "monthly_salary" : newData[index]['monthly_salary'],
-      "include_benefit" : newData[index]['include_benefit'],
-      "salary_benefit_include" : form.getFieldValue("salary_benefit_include"),
-      "salary_benefit_include_notinclude": form.getFieldValue("salary_benefit_include_notinclude"),
-      "insured_share" : 0,
-      "employer_share" : 0,
-      "jobless_share" : 0,
-      "hard_job_share" : 0,
-      "total_share" : newData[index]['total_share'],
-      "job_id_fk" : form.getFieldValue("job_id_fk"),
-      "desscription": "Updated"
-    };
-    newData[index]['job_id_fk']=value['job_id_fk'];
-    newData[index]['salary_benefit_include']=value['salary_benefit_include'];
-    newData[index]['salary_benefit_include_notinclude']=value['salary_benefit_include_notinclude'];
-    newData[index]['daily_salary']=value['daily_salary'];
-
-    axios.put(`/insurance/tamin/person/${key}`,value)
-    .then( response => {
-        console.log(originData);
-        console.log(newData);
-        originData=[...newData];
-        setData(newData);
-        console.log("با موفقیت انجام شد");
-    } )
-    .catch( error => {
-        message.error("نتیجه ای یافت نشد.");
-        console.log(error);
-    } );
-
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
-    }
-  };
   
   const fetchCode=(e)=>{
     axios.get( '/admin/personnel/lookup/'+e.target.value )
@@ -249,7 +276,12 @@ const EditableTable = () => {
             console.log(response);
             setPersonel(response.data.id);
             setSendingStatus(false);
-            setPerson(response.data.first_name+" "+response.data.last_name)
+            setPerson(response.data.first_name+" "+response.data.last_name);
+            if(response.data.job_id!==null){
+              setJobTitle(response.data.job_title);
+              setJobId(response.data.job_id);
+              setJobStatus(true);
+            }
             message.success("شخص مورد نظر یافت شد");
             console.log("شخص مورد نظر یافت شد");
         } )
@@ -264,8 +296,16 @@ const EditableTable = () => {
     axios.get( '/jobtitle/'+e.target.value )
         .then( response => {
             console.log(response.data);
+            setJobTitle(response.data.title);
+            setJobId(e.target.value);
             message.success("کد شغل موجود است");
             console.log("کد شغل موجود است");
+            formAddPerson.setFields([
+                {
+                    name: "job_id_fk",
+                    errors: null
+                }
+            ]);
         } )
         .catch( error => {
           formAddPerson.setFields([
@@ -280,12 +320,38 @@ const EditableTable = () => {
   }
 
   const addPersonToList=(values) => {
+    if(saveP===1){
+      values['insurance_id']=insuranceId;
+      values['personnel_id']=personnelId;
+      values['start_date']=sdate;
+      values['end_date']=edate;
+      values['job_id_fk']=jobId;
+      delete values['national_id'];
+      console.log(values);
+      axios.put("/insurance/tamin/person/"+itemId,values)
+      .then( response => {
+          console.log(response.data);
+          setChangeForm(false);
+          setSaveOP(0);
+          formAddPerson.resetFields();
+          setJobTitle("");
+          console.log("بروز شد");
+      } )
+      .catch( error => {
+          message.error("نتیجه ای یافت نشد.");
+          console.log(error);
+      } );
+      return;
+    }
     values['insurance_id']=insuranceId;
-    values['personnel_id']=2;
     values['start_date']=sdate;
     values['end_date']=edate;
     values['personnel_id']=personnelId;
-    console.log(values);
+    values['job_id_fk']=jobId;
+    if(values['job_id_fk']===null){
+      message.error("کد شغل صحیح نیست");
+      return;
+    }
     if(values['description']===undefined)values['description']="";
     console.log(values);
     setSendingStatus(true);
@@ -293,47 +359,20 @@ const EditableTable = () => {
         .then( response => {
             setSendingStatus(false);
             setChange(1);
+            setChangeForm(false);
             message.success("با موفقیت انجام شد");
-            console.log("با موفقیت انجام شد");
         } )
         .catch( error => {
             setSendingStatus(false);
             message.error("خطایی رخ داد");
-            console.log("خطایی رخ داد");
         } );
-  }
-
-  // const deleteItems=()=>{
-    
-  //   let value={data:{"ids" : select.selectedRowKeys}}
-  //   axios.delete("/insurance/tamin/person",value)
-  //   .then( response => { 
-  //       originData=originData.filter((obj)=>{
-  //       return obj.id!==record.id;
-  //       });
-  //       setData(originData);
-  //       console.log(originData);
-  //       console.log("با موفقیت انجام شد");
-  //   } )
-  //   .catch( error => {
-  //       message.error("حذف انجام نشد.");
-  //       console.log(error);
-  //   } );
-  //   return;
-  // }
-
-  let history = useHistory();
-  const createItem=()=>{
-    history.push('/dashboard/tamin');
   }
 
   const onResetSearch = () => {
     formAddPerson.resetFields();
   };
-  
 
   const dateValidation=(e)=>{
-    console.log(validator.isDate(e.target.value));
     if (!validator.isDate(e.target.value)) {
         formAddPerson.setFields([
             {
@@ -349,7 +388,7 @@ const EditableTable = () => {
     let monthlySalary=formAddPerson.getFieldValue('total_work_day')*formAddPerson.getFieldValue('daily_salary');
     let includeBenefit=parseInt(setting['bonus'])+parseInt(setting['housing']);
     //daily_salary
-    formAddPerson.setFieldsValue({daily_salary:minDailySalary});
+    formAddPerson.setFieldsValue({daily_salary:formAddPerson.getFieldValue("daily_salary")});
     //monthly_salary
     formAddPerson.setFieldsValue({monthly_salary:monthlySalary});
     //include_benefit
@@ -490,26 +529,8 @@ const EditableTable = () => {
       width: '6%',
       dataIndex: 'operation',
       render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
+        return(
           <span>
-            <CheckCircleTwoTone
-              twoToneColor="#52c41a" 
-              style={{fontSize: '18px'}}
-              href="javascript:;"
-              onClick={() => save(record.id)}
-            >
-               اعمال 
-            </CheckCircleTwoTone>
-            <Popconfirm okText="بله" cancelText="خیر" title="لغو شود؟" onConfirm={cancel}>
-            <CloseCircleTwoTone twoToneColor="#eb2f96" style={{marginRight:"10px", fontSize: '18px'}}> لغو </CloseCircleTwoTone>
-            </Popconfirm>
-          </span>
-        ) : (
-          <span>
-            {/* <Typography.Link style={{marginLeft:"5px"}} disabled={editingKey !== ''} onClick={() => edit(record,1)}>
-              ویرایش  
-            </Typography.Link> */}
             <EditTwoTone style={{marginLeft:"5px", fontSize: '18px'}} disabled={editingKey !== ''} onClick={() => edit(record,1)}/>
             <DeleteTwoTone style={{marginRight:"5px", fontSize: '16px'}} disabled={editingKey !== ''} onClick={() => DeletePerson(record)}/>
           </span>
@@ -557,9 +578,9 @@ const EditableTable = () => {
 
         <Row>
           
-        <Col span={8}>
+          <Col span={8}>
               <Form.Item
-                  name="personnel_id"
+                  name="national_id"
                   label="کد ملی"
                   rules={[
                       {
@@ -578,10 +599,7 @@ const EditableTable = () => {
                       />
               </Form.Item>
           </Col>
-        </Row>
-
-        <Row>
-          <Col span={10}>
+          <Col span={8}>
             <div className={classes.dateItems}>
                 <Form.Item
                     label="تاریخ شروع به کار"
@@ -615,7 +633,6 @@ const EditableTable = () => {
                         let date=value["$jy"]+"/"+value["$jM"]+"/"+value["$jD"];
                         let r=date.replace("/","");
                         let d=r.replace("/","");
-                        console.log(d);
                         let dateandhour=date+" "+value["$H"]+":"+value["$m"]+":"+value["$s"];
                         setSDATE(dateandhour);
                         setStartDate(parseInt(d));
@@ -624,7 +641,7 @@ const EditableTable = () => {
                     }}/>
             </div>
           </Col>
-          <Col span={10}>
+          <Col span={8}>
             <div className={classes.dateItems}>
               <Form.Item
                   label="تاریخ پایان کار"
@@ -647,7 +664,6 @@ const EditableTable = () => {
                   let date=value["$jy"]+"/"+value["$jM"]+"/"+value["$jD"];
                   let r=date.replace("/","");
                   let d=r.replace("/","");
-                  console.log(parseInt(d)<=startDate);
                   if(parseInt(d)<=startDate){
                     formAddPerson.setFieldsValue({end_date:""});
                     formAddPerson.setFields([
@@ -696,7 +712,6 @@ const EditableTable = () => {
             <Form.Item
                 name="daily_salary"
                 label="دستمزد روزانه"
-                initialValue={minDailySalary}
                 rules={[
                     {
                       required: true,
@@ -711,6 +726,7 @@ const EditableTable = () => {
                 <InputNumber style={{width:"100%"}} disabled={sendingStatus} 
                       min={minDailySalary}
                       max={maxDailySalary}
+                      defaultValue={minDailySalary}
                       onBlur={()=>calcuteForm()}
                       onChange={()=>calcuteForm()}
                       />
@@ -903,20 +919,16 @@ const EditableTable = () => {
             <Form.Item
                 name="job_id_fk"
                 label="کد شغل"
-                initialValue={200}
                 rules={[
-                    {
-                      required: true,
-                      message: "مقدار را وارد کنید!",
-                    },
                     {
                       pattern: /^(?:\d*)$/,
                       message: "فقط عدد وارد کنید.",
                     }
                 ]}
             >
-                <InputNumber style={{width:"100%"}} disabled={sendingStatus} onBlur={(e)=>{fetchJob(e)}}/>
-            </Form.Item>
+                <InputNumber style={{width:"100%"}} disabled={jobStatus} defaultValue={jobId} onBlur={(e)=>{fetchJob(e)}}/>
+                
+            </Form.Item><h5>{jobTitle}</h5>
           </Col>
         </Row>
         <Row>
@@ -939,12 +951,7 @@ const EditableTable = () => {
       </Form>
       
       <Form form={form} component={false}>
-        {/* <Button disabled={select.selectedRowKeys.length===0} onClick={deleteItems} className={"submitButton"} type="primary">
-            حذف
-        </Button> */}
-        {/* <Button  onClick={createItem} className={"submitButton"} type="primary">
-            ایجاد
-        </Button> */}
+ 
           <Table className={"listform"}
             components={{
               body: {

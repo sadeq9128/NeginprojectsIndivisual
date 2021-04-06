@@ -52,11 +52,15 @@
   }
   
   .inputDate{
-    width: 100% !important;
-    min-width: 200px !important;
+    width: 140px !important;
+    min-width: 140px !important;
   }
   
   .dateButton{
     margin-bottom: 24px !important;
+  }
+
+  .ant-form-item-label label{
+    font-size: 10px imp !important;
   }
   
