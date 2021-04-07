@@ -746,6 +746,21 @@ const EditableTable = () => {
           </Col>
           <Col span={8}>
             <Form.Item
+                name="job_id_fk"
+                label="کد شغل"
+                rules={[
+                    {
+                      pattern: /^(?:\d*)$/,
+                      message: "فقط عدد وارد کنید.",
+                    }
+                ]}
+            >
+                <InputNumber style={{width:"100%"}} disabled={jobStatus} defaultValue={jobId} onBlur={(e)=>{fetchJob(e)}}/>
+                
+            </Form.Item><h5>{jobTitle}</h5>
+          </Col>
+          <Col span={8} style={{visibility:"collapse"}}>
+            <Form.Item
                 name="monthly_salary"
                 label="دستمزد ماهانه"
                 initialValue={formAddPerson.getFieldValue("daily_salary")*totalWorkDay}
@@ -763,8 +778,16 @@ const EditableTable = () => {
                 <InputNumber style={{width:"100%"}} disabled={true}/>
             </Form.Item>
           </Col>
+        </Row><Row>
+          <Col span={16}>
+            <Form.Item
+              name="description"
+              label="توضیحات">
+              <Input.TextArea disabled={sendingStatus}/>
+            </Form.Item>
+          </Col>
         </Row>
-        <Row>
+        <Row style={{display:"none"}}>
           <Col span={8}>
             <Form.Item
                 name="include_benefit"
@@ -785,7 +808,7 @@ const EditableTable = () => {
                 onFocus={()=>calcuteForm()} />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={8} style={{visibility:"collapse"}}>
             <Form.Item
                 name="salary_benefit_include"
                 label="دستمزد و مزایای مشمول"
@@ -829,7 +852,7 @@ const EditableTable = () => {
             </Form.Item>
           </Col>
         </Row>
-        <Row>
+        <Row style={{display:"none"}}>
           <Col span={8}>
             <Form.Item
                 name="insured_share"
@@ -888,7 +911,7 @@ const EditableTable = () => {
             </Form.Item>
           </Col>
         </Row>
-        <Row>
+        <Row style={{display:"none"}}>
           <Col span={8}>
             <Form.Item
                 name="hard_job_share"
@@ -908,7 +931,7 @@ const EditableTable = () => {
                 <InputNumber style={{width:"100%"}} disabled={sendingStatus} />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={8} style={{visibility:"collapse"}}>
             <Form.Item
                 name="total_share"
                 label="جمع حق بیمه"
@@ -927,31 +950,9 @@ const EditableTable = () => {
                 <InputNumber style={{width:"100%"}} disabled={true} />
             </Form.Item>
           </Col>
-          <Col span={8}>
-            <Form.Item
-                name="job_id_fk"
-                label="کد شغل"
-                rules={[
-                    {
-                      pattern: /^(?:\d*)$/,
-                      message: "فقط عدد وارد کنید.",
-                    }
-                ]}
-            >
-                <InputNumber style={{width:"100%"}} disabled={jobStatus} defaultValue={jobId} onBlur={(e)=>{fetchJob(e)}}/>
-                
-            </Form.Item><h5>{jobTitle}</h5>
-          </Col>
+          
         </Row>
-        <Row>
-          <Col span={16}>
-            <Form.Item
-              name="description"
-              label="توضیحات">
-              <Input.TextArea disabled={sendingStatus}/>
-            </Form.Item>
-          </Col>
-        </Row>
+        
             <Form.Item {...tailLayout}>                 
                 <Button disabled={sendingStatus} loading={sendingStatus} className={classes.submitButton} type="primary" htmlType="submit">
                     ثبت

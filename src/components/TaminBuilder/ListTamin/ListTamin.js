@@ -13,7 +13,7 @@ const { Search } = Input;
 
 let originData = [];
 let oldWord='';
-
+var highlight;var search;
 const EditableCell = ({
   editing,
   dataIndex,
@@ -254,28 +254,39 @@ const EditableTable = () => {
         text
       ),
   });
-
   const handleSearch = (setSelectedKeys,selectedKeys,e, confirm, dataIndex,clearFilters) => {
-
+  
+    clearTimeout(highlight);
+    clearTimeout(search);
+    const allRows = document.getElementsByClassName("ant-table-row");
+    for (let tr of allRows) {
+      tr.classList.add("removing");
+    }
     if(e.target===undefined)return;
     oldWord=e.target.value;
     setSearching(true);
-    setSelectedKeys(e.target.value ? [e.target.value] : []);
-    setTimeout(() => {    
+    setSelectedKeys([e.target.value]);
+    
+    highlight=setTimeout(()=>{
+      setSearchText(e.target.value);
+      setSearchedColumn(dataIndex);
+    },500);
+    search=setTimeout(() => {    
       if(oldWord.length===1){
         confirm();
-        setSearchText(e.target.value);
-        setSearchedColumn(dataIndex);
       }else if(oldWord===e.target.value){
         confirm();
         setSelectedKeys(e.target.value ? [e.target.value] : []);
-        setSearchText(e.target.value);
-        setSearchedColumn(dataIndex);
       }
       else{
         clearFilters();
       }
+      const allRows = document.getElementsByClassName("ant-table-row");
+      for (let tr of allRows) {
+        tr.classList.add("removing");
+      }
       setSearching(false);
+      console.log("*");
     },500);
   };
 
