@@ -6,7 +6,6 @@ import DatePick from "../../../Utils/customDatePicker/DatePick";
 import {Row,Col} from 'antd';
 import classes from "./Form.module.css";
 import validator from 'validator';
-import {useHistory } from "react-router-dom";
 import MaskedInput from "antd-mask-input";
 import moment from 'moment';
 import axios from "../../../axios";
@@ -77,7 +76,7 @@ const AccidentCreate = (props) => {
         message.error({ content: "شخص"+" پیدا نشد", key });
     } );
   }
-  let history=useHistory();
+  
   const finishForm=(values)=>{
     values['address']=address;
     values['time']=((values['time']['_d'])+"").split(" ")[4];
@@ -85,7 +84,7 @@ const AccidentCreate = (props) => {
     axios.post( "/admin/incident",values )
     .then( response => {
         message.success("با موفقیت ثبت شد");
-        history.push('/dashboard/accidentlist');
+        window.location.reload();
 
     } )
     .catch( error => {
