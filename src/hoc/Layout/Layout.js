@@ -8,6 +8,7 @@ import NewTools from "../../components/HoghoghiBuilder/NewTools/NewTools";
 import TaminBuilder from "../../components/TaminBuilder/TaminBuilder";
 import listtamin from "../../components/TaminBuilder/ListTamin/ListTamin";
 import AddPersonBuilder from "../../components/AddPerson/AddPersonBuilder";
+import AccidentList from "../../components/Accident/AccidentBuilder";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -66,6 +67,10 @@ class SiderLayout extends Component {
               اضافه کردن فرد
               <Link to="/dashboard/addperson" />
             </Menu.Item>
+            <Menu.Item key="5" icon={<UploadOutlined />}>
+              لیست حوادث
+              <Link to="/dashboard/accidentlist" />
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout className="site-layout content" style={{marginRight:this.state.collapsed ? "80px" : "200px"}}>
@@ -87,6 +92,7 @@ class SiderLayout extends Component {
             <Route path="/dashboard/tamin" component={TaminBuilder}/>
             <Route path="/dashboard/listtamin" component={listtamin}/>
             <Route path="/dashboard/addperson" component={AddPersonBuilder}/>
+            <Route path="/dashboard/accidentlist" component={AccidentList}/>
           </Content>
         </Layout>
       </Layout>

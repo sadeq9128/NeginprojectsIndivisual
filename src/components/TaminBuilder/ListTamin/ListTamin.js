@@ -214,7 +214,7 @@ const EditableTable = () => {
   };
 
 
- const getColumnSearchProps = dataIndex => ({
+  const getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Search
@@ -288,11 +288,6 @@ const EditableTable = () => {
       setSearching(false);
       console.log("*");
     },500);
-  };
-
-  const handleReset = clearFilters => {
-    clearFilters();
-    setSearchText('');
   };
 
 
@@ -418,9 +413,6 @@ const EditableTable = () => {
       }},
     };
   });
-  
-  
-  
   
   return (
     <Form form={form} component={false}>

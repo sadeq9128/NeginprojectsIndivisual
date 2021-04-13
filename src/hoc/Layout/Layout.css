@@ -20,6 +20,13 @@
     background: #fff;
   }
 
+  #container{
+    background-image: url(../../assets/back.jpg);
+  }
+  .ant-layout-content{
+    background-color: transparent !important;
+  }
+
   .content{
     height: min-content;
     margin-right: 200px;

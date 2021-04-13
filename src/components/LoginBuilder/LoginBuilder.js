@@ -4,11 +4,14 @@ import Login from "./Login/Login";
 import Authenticate from "./Authenticate/Authenticate";
 import classes from "./LoginBuilder.module.css";
 import {useHistory,Route,Redirect } from "react-router-dom";
+import UserContext from '../../Context/Context';
+
 
 const LoginBuilder=()=>{
     
     const [id,setId]=useState();
     const [authKey,setAuthKey]=useState(null);
+    const context = React.useContext(UserContext);
 
     let frame=null;
 
@@ -18,19 +21,17 @@ const LoginBuilder=()=>{
 
     const getAuthKeyFromServer=(authKeyFromServer)=>{
         setAuthKey(authKeyFromServer);
-        console.log(authKeyFromServer["token"]);
+        context.addUserData(authKeyFromServer);
         localStorage.setItem("token",authKeyFromServer["token"]);
     }
 
     frame=(<Login getId={(id)=>getIdFromServer(id)}/>);
     if(id)
         frame=(<Authenticate getAuthKey={(authKey=>getAuthKeyFromServer(authKey))} id={id}/>);
-
     
-    let history = useHistory();
     if(authKey!==null){
-        //history.push('/dahsboard');
-        frame=<Route
+        frame=
+            <Route
             exact
             path="/"
             render={() => {
@@ -43,7 +44,7 @@ const LoginBuilder=()=>{
 
     return(
         <Auxx>
-            {frame}
+                {frame}
         </Auxx>
     );
 }

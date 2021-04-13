@@ -47,10 +47,6 @@ const NewToolsForm=(props)=>{
     const [id,setId]=useState();
     const [name,setName]=useState("نامشخص !!!");
 
-    
-    axios.defaults.headers.common = {'Authorization':localStorage.getItem("token")};
-    console.log(localStorage.getItem("token"));
-
     // useEffect(() => {
     // },[props.sending]);
 

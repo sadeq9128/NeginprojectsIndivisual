@@ -71,7 +71,6 @@ const Authenticate=(props)=>{
                 setSeconds(0);
                 setMinutes(0);
                 setAuthKey(response.data);
-                // console.log(response.data["token"]);
                 props.getAuthKey(response.data);
             } )
             .catch( error => {
@@ -79,7 +78,10 @@ const Authenticate=(props)=>{
                 console.log("خطایی رخ داد");
             } );
     };
-
+    const user = {
+        fullName: 'Mostafa Jafari',
+        avatar: "https://avatars2.githubusercontent.com/u/6865268?s=460&v=4",
+}
     let resendCode=null;
     if(minutes === 0 && seconds===0){
         resendCode=(<a onClick={sendCode}>ارسال مجدد کد تایید</a>);
@@ -94,7 +96,6 @@ const Authenticate=(props)=>{
     }
 
     return (
-
         <div className={classes.cntr}>
         <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
             <div className={classes.sectionForm}>
