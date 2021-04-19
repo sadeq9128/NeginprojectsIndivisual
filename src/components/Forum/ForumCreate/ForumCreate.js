@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TimePicker, Input, Select, Radio, Form, Button, Checkbox, message } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import "./AccidentCreate.css";
+import "./ForumCreate.css";
 import DatePick from "../../../Utils/customDatePicker/DatePick";
 import {Row,Col} from 'antd';
 import classes from "./Form.module.css";
@@ -23,7 +23,7 @@ const tailLayout = {
 let machineInfo={code:""};
 let address="";
 let personnelInfo={code:"",id:"",relation:"پرسنل"};
-const AccidentCreate = (props) => {
+const ForumCreate = (props) => {
   const [form] = Form.useForm();
   const [sendingStatus,setSendingStatus]=useState(false);
 
@@ -161,7 +161,7 @@ const AccidentCreate = (props) => {
         <Row gutter={18}>
           <Col xs={2} sm={4} md={6} lg={6} xl={8}>
               <Form.Item
-                  name="accident_reason"
+                  name="Forum_reason"
                   label="علت حادثه"
                   rules={[
                       {
@@ -625,4 +625,4 @@ const AccidentCreate = (props) => {
 
 };
 
-export default AccidentCreate;
+export default ForumCreate;

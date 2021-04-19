@@ -25,6 +25,7 @@ const App=()=>{
           <Route exact path="/dashboard/listtamin"><SiderLayout keyitem="3"/></Route>
           <Route exact path="/dashboard/addperson"><SiderLayout keyitem="4"/></Route>
           <Route exact path="/dashboard/accidentlist"><SiderLayout keyitem="5"/></Route>
+          <Route exact path="/dashboard/forumlist"><SiderLayout keyitem="56"/></Route>
       </Switch>
     </UserContext.Provider>
   );

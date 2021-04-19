@@ -1,0 +1,10 @@
+.div{
+    text-align: center;
+    direction: rtl;
+    font-family: iranyekanwebmediumfanum;
+  }
+  
+  @font-face {
+    font-family: 'iranyekanwebmediumfanum';
+    src: local('iranyekanwebmediumfanum'), url(../../assets/fonts/iranyekanwebmediumfanum.ttf) format('truetype');
+  }

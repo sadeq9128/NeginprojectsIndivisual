@@ -1,18 +1,18 @@
 import React,{ useState } from "react";
-import AccidentList from "./AccidentList/AccidentList";
-import AccidentCreate from "./AccidentCreate/AccidentCreate";
-import classes from "./AccidentBuilder.module.css";
+import ForumList from "./ForumList/ForumList";
+import ForumCreate from "./ForumCreate/ForumCreate";
+import classes from "./ForumBuilder.module.css";
 import UserContext from '../../Context/Context';
 
 
-const AccidentBuilder=()=>{
+const ForumBuilder=()=>{
     const [createItem,setCreateItem]=useState(false);
     const [data,setData]=useState(null);
     const formHandler=(status,data)=> {
         setCreateItem(status);
         setData(data);
     }
-    let page=<AccidentList status={createItem} formHandler={formHandler}/>;
+    let page=<ForumList status={createItem} formHandler={formHandler}/>;
     if(createItem){
         //setCreateItem(false);
         page=
@@ -20,7 +20,7 @@ const AccidentBuilder=()=>{
             {
                 (userData)=>{
                     return (
-                        <AccidentCreate data={data} userData={userData} status={createItem} formHandler={formHandler}/>
+                        <ForumCreate data={data} userData={userData} status={createItem} formHandler={formHandler}/>
                     )
                 }
             }
@@ -34,4 +34,4 @@ const AccidentBuilder=()=>{
     );
 }
 
-export default AccidentBuilder;
+export default ForumBuilder;

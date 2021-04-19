@@ -1,8 +1,8 @@
 import React, { useState,useEffect } from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form, message,Button, Select } from 'antd';
+import { Row, Col } from 'antd';
 import "./AddPerson.css";
 import DatePick from "./customDatePicker/DatePick";
-import {Row,Col} from 'antd';
 import axios from "../../../axios";
 import {useLocation,useHistory,Route,Redirect } from "react-router-dom";
 import {
@@ -626,7 +626,7 @@ const EditableTable = () => {
                     <MaskedInput disabled={sendingStatus} onBlur={(e)=>{dateValidation(e)}} className={classes.inputDate} placeholder="روز/ماه/سال" mask="1111/11/11" />
                 </Form.Item>
                 <DatePick disabled={sendingStatus} className={classes.dateButton} onChange={(value)=>{
-                    console.log(value["$H"]);
+
                     if(value===null){
                       formAddPerson.setFieldsValue({start_date:""});
                     }else if(parseInt(value["$jM"]+1)!==parseInt(month) 

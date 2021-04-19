@@ -1,12 +1,13 @@
 import React, { useState,useEffect } from 'react';
 import { Table, Input, Form, message,Button} from 'antd';
-import "./AccidentList.css";
+import "./ForumList.css";
 import axios from "../../../axios";
 import {
-  EditTwoTone,CheckCircleTwoTone,CloseCircleTwoTone,SettingTwoTone
+  EditTwoTone,SettingTwoTone
 } from '@ant-design/icons';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
+import useForum from "../../../hooks/useForum";
 const { Search } = Input;
 
 
@@ -14,27 +15,39 @@ let originData = [];
 let oldWord='';
 var highlight;var search;
 
-const AccidentList = (props) => {
+const ForumList = (props) => {
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
   const [change,setChange] = useState(null);
+  const [showForm,setShowForm]=useState(false);
   const [select, setSelect] = useState({
     selectedRowKeys: [],
   });
   const [searchText,setSearchText]=useState('');
   const [searchedColumn,setSearchedColumn]=useState('');
   const [searching,setSearching]=useState(false);
+  const {response, isLoading} = useForum({
+   url: "https://baje724.ir/api/survey/",
+   data:"150",
+  });
 
   useEffect(() => {
-    axios.get("/admin/incident/")
+    axios.get("https://baje724.ir/api/survey/150")
       .then( response => {
-          originData=[...response.data];
+          originData=[response.data.survey];
           setData(originData);
       } )
       .catch( error => {
           message.error("نتیجه ای یافت نشد.");
+          console.log(error,"error");
       } );
   },[change])
+
+  useEffect(() => {
+    if (response !== null) {
+      // do more stuff if you wish
+    }
+  }, [response]);
   
   const { selectedRowKeys } = select.selectedRowKeys;
 
@@ -147,41 +160,41 @@ const AccidentList = (props) => {
         tr.classList.add("removing");
       }
       setSearching(false);
-      console.log("*");
     },500);
   };
 
 
   const columns = [
     {
-      title: 'نوع حادثه',
-      dataIndex: 'type',
-      key: 'type',
+      title: 'عنوان',
+      dataIndex: 'title',
+      key: 'title',
+      width: '15%',
+      ...getColumnSearchProps('عنوان'),
+    },
+    {
+      title: 'نوع مشارکت',
+      dataIndex: 'participate_type',
+      key: 'participate_type',
       width: '7%',
-      ...getColumnSearchProps('type'),
     },
     {
-      title: 'محل وقوع حادثه',
-      dataIndex: 'location',
-      key: 'location',
+      title: 'نوع پیشنهاد',
+      dataIndex: 'type',
+      width: '5%',
+      key: 'type',
+    },
+    {
+      title: 'وضعیت',
+      dataIndex: 'status',
       width: '20%',
-    },
-    {
-      title: 'زمان',
-      dataIndex: 'date',
-      width: '10%',
-      key: 'date',
-    },
-    {
-      title: 'علت حادثه',
-      dataIndex: 'reason',
-      width: '20%',
-      key: 'reason',
-      ...getColumnSearchProps('reason'),
+      key: 'status',
+      ...getColumnSearchProps('category_name'),
     },
     {
       title: 'ابزارها',
       width: '6%',
+      key:'operation',
       dataIndex: 'operation',
       render: (_, record) => {
         return (
@@ -213,9 +226,10 @@ const AccidentList = (props) => {
         rowKey={(record)=>record.id}
         columns={columns}
       />
+      {response}
     </Form>
   );
 
 };
 
-export default AccidentList;
+export default ForumList;
