@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { Collapse,Input,Button,Form, message   } from 'antd';
 import {Row,Col } from 'antd';
 import {
-  DislikeTwoTone,LikeTwoTone
+  DislikeTwoTone,LikeTwoTone,DeleteTwoTone
 } from '@ant-design/icons';
 import axios from "../axios";
 
@@ -104,6 +104,24 @@ function useForum({url, data = null}) {
         setChange(change+1);
     }
 
+    const deleteComment=(id)=>{
+        setIsLoading(true);
+        console.log(id);
+        axios.delete("https://baje724.ir/api/survey/advdis/"+id)
+            .then( response => {
+                console.log("حذف شد");
+                message.success("حذف شد");
+                setIsLoading(false);
+                setChange(change+1);
+                setApiCall(false);
+            } )
+            .catch( error => {
+                message.error("خطا به هنگام حذف");
+                console.log(error);
+                setIsLoading(false);
+        } );
+    }
+
     useEffect(() => {
       const fetchData = async () => {
          try {
@@ -129,13 +147,15 @@ function useForum({url, data = null}) {
                                     <span>
                                         <span style={{color:"blue"}}><LikeTwoTone onClick={()=>addLikeDislike("disadv_id","like",el.id)}/> {el.likes}</span>
                                         <span>&nbsp; &nbsp;</span>
-                                        <span style={{color:"red"}}><DislikeTwoTone onClick={()=>addLikeDislike("disadv_id","dislike",el.id)}/> {el.dislikes}</span>
+                                        <span style={{color:"red"}}><DislikeTwoTone twoToneColor="#eb2f96" onClick={()=>addLikeDislike("disadv_id","dislike",el.id)}/> {el.dislikes}</span>
+                                        <span>&nbsp; &nbsp;</span>
+                                        <span style={{color:"red"}}><DeleteTwoTone twoToneColor="#805101" onClick={()=>deleteComment(el.id)}/></span>
                                     </span>
                                 </div>
                             return (
                                 <div>
-                                    <Collapse accordion>
-                                        <Panel header={title} key={el.id} >
+                                    <Collapse bordered={false} accordion>
+                                        <Panel header={title} key={el.id}>
                                             {comment.map(elComment=>{
                                                 if(elComment.disadv_id===el.id){
                                                     return (
@@ -145,7 +165,7 @@ function useForum({url, data = null}) {
                                                             <span>
                                                                 <span style={{color:"blue"}}><LikeTwoTone onClick={()=>addLikeDislike("comment_id","like",elComment.id)}/> {elComment.likes}</span>
                                                                 <span>&nbsp; &nbsp;</span>
-                                                                <span style={{color:"red"}}><DislikeTwoTone onClick={()=>addLikeDislike("comment_id","dislike",elComment.id)}/> {elComment.dislikes}</span>
+                                                                <span style={{color:"red"}}><DislikeTwoTone twoToneColor="#eb2f96"  onClick={()=>addLikeDislike("comment_id","dislike",elComment.id)}/> {elComment.dislikes}</span>
                                                             </span>
                                                             <hr className="commentHr"/>
                                                         </div>
@@ -185,12 +205,14 @@ function useForum({url, data = null}) {
                                     <span>
                                         <span style={{color:"blue"}}><LikeTwoTone onClick={()=>addLikeDislike("disadv_id","like",el.id)}/> {el.likes}</span>
                                         <span>&nbsp; &nbsp;</span>
-                                        <span style={{color:"red"}}><DislikeTwoTone onClick={()=>addLikeDislike("disadv_id","dislike",el.id)}/> {el.dislikes}</span>
+                                        <span style={{color:"red"}}><DislikeTwoTone twoToneColor="#eb2f96"  onClick={()=>addLikeDislike("disadv_id","dislike",el.id)}/> {el.dislikes}</span>
+                                        <span>&nbsp; &nbsp;</span>
+                                        <span style={{color:"red"}}><DeleteTwoTone twoToneColor="#805101" onClick={()=>deleteComment(el.id)}/></span>
                                     </span>
                                 </div>
                             return (
                                 <div>
-                                    <Collapse accordion>
+                                    <Collapse bordered={false} accordion>
                                         <Panel header={title} key={el.id}>
                                             {comment.map(elComment=>{
                                                 if(elComment.disadv_id===el.id){
@@ -201,7 +223,7 @@ function useForum({url, data = null}) {
                                                             <span>
                                                                 <span style={{color:"blue"}}><LikeTwoTone onClick={()=>addLikeDislike("comment_id","like",elComment.id)}/> {elComment.likes}</span>
                                                                 <span>&nbsp; &nbsp;</span>
-                                                                <span style={{color:"red"}}><DislikeTwoTone onClick={()=>addLikeDislike("comment_id","dislike",elComment.id)}/> {elComment.dislikes}</span>
+                                                                <span style={{color:"red"}}><DislikeTwoTone twoToneColor="#eb2f96"  onClick={()=>addLikeDislike("comment_id","dislike",elComment.id)}/> {elComment.dislikes}</span>
                                                             </span>
                                                             <hr className="commentHr"/>
                                                         </div>
@@ -256,6 +278,7 @@ function useForum({url, data = null}) {
                             {layoutAdv}
                             {/* ----------------------------------------------------------------------------------- */}
                             {/* ----------------------------------------------------------------------------------- */}
+                            <p></p>
                             <div className={"commentsTitleAdvDis"}>
                                 <h4>معایب:</h4>
                                 <Button onClick={showFormDisChange}>افزودن</Button>
