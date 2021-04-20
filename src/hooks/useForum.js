@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { Collapse,Input,Button,Form, message   } from 'antd';
+import { Collapse, Input, Button, Form, message, Avatar } from 'antd';
 import {Row,Col } from 'antd';
 import {
   DislikeTwoTone,LikeTwoTone,DeleteTwoTone
@@ -160,8 +160,11 @@ function useForum({url, data = null}) {
                                                 if(elComment.disadv_id===el.id){
                                                     return (
                                                         <div className={"commentAdv"}>
-                                                            <span className={"commentInfo"}>{elComment.first_name} {elComment.last_name} ---- {elComment.date}</span>
-                                                            <p key={elComment.id}>{elComment.description}</p>
+                                                            <span className={"commentInfo"}>
+                                                                <Avatar style={{marginBottom:"8px"}} size={25} src="https://avatars.githubusercontent.com/u/4776235?s=40&v=4" />&nbsp; &nbsp;
+                                                                {elComment.first_name} {elComment.last_name} ---- {elComment.date}
+                                                            </span>
+                                                            <p key={elComment.id}>&nbsp; {elComment.description}</p>
                                                             <span>
                                                                 <span style={{color:"blue"}}><LikeTwoTone onClick={()=>addLikeDislike("comment_id","like",elComment.id)}/> {elComment.likes}</span>
                                                                 <span>&nbsp; &nbsp;</span>
@@ -218,8 +221,10 @@ function useForum({url, data = null}) {
                                                 if(elComment.disadv_id===el.id){
                                                     return (
                                                         <div className={"commentDisadv"}>
-                                                            <span className={"commentInfo"}>{elComment.first_name} {elComment.last_name} ---- {elComment.date}</span>
-                                                            <p key={elComment.id}>{elComment.description}</p>
+                                                            <span className={"commentInfo"}>
+                                                                <Avatar style={{marginBottom:"8px"}} size={25} src="https://avatars.githubusercontent.com/u/4776235?s=40&v=4" />&nbsp; &nbsp;
+                                                                {elComment.first_name} {elComment.last_name} ---- {elComment.date}</span>
+                                                            <p key={elComment.id}>&nbsp; {elComment.description}</p>
                                                             <span>
                                                                 <span style={{color:"blue"}}><LikeTwoTone onClick={()=>addLikeDislike("comment_id","like",elComment.id)}/> {elComment.likes}</span>
                                                                 <span>&nbsp; &nbsp;</span>
@@ -306,10 +311,10 @@ function useForum({url, data = null}) {
                             {layoutDisadv}
                         </div>
                     
-                }catch(e){
+                    }catch(e){
                         console.log(e);
                     }
-                  setResponse(layout);
+                    setResponse(layout);
                })
                .finally(() => {
                   setIsLoading(false);

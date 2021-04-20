@@ -35,6 +35,7 @@ const ForumList = (props) => {
     axios.get("https://baje724.ir/api/survey/150")
       .then( response => {
           originData=[response.data.survey];
+          console.log(response.data);
           setData(originData);
       } )
       .catch( error => {
@@ -91,7 +92,6 @@ const ForumList = (props) => {
       });
     },
   };
-
 
   const getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
