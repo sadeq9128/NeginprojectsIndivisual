@@ -145,12 +145,10 @@
 .commentAdv{
     padding-right:8px;
     text-align: right;
-    color: #088a16;
 }
 .commentDisadv{
     padding-right:8px;
     text-align: right;
-    color: firebrick;
 }
 
 .commentTitle{
@@ -161,6 +159,10 @@
 .commentInfo{    
     font-size: 10px;
     color: #b2b3b3;
+}
+
+.ant-tag {
+  line-height: 15px;
 }
 
 .commentHr{

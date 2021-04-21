@@ -1,8 +1,8 @@
 import React, { useState,useEffect } from 'react';
-import { Collapse, Input, Button, Form, message, Avatar } from 'antd';
+import { Collapse, Input, Button, Form, message, Avatar, Tag } from 'antd';
 import {Row,Col } from 'antd';
 import {
-  DislikeTwoTone,LikeTwoTone,DeleteTwoTone
+  DislikeTwoTone,LikeTwoTone,DeleteTwoTone,EyeFilled
 } from '@ant-design/icons';
 import axios from "../axios";
 
@@ -58,6 +58,10 @@ function useForum({url, data = null}) {
                 console.log("دیدگاه شما ثبت شد.");
                 message.success("دیدگاه شما ثبت شد");
                 setIsLoading(false);
+                if(type==="adv")
+                setShowFormAdv(!showFormAdv);
+                if(type==="dis")
+                setShowFormDis(!showFormDis);
                 setChange(change+1);
                 formAdv.resetFields();
             } )
@@ -136,13 +140,13 @@ function useForum({url, data = null}) {
                         console.log("api call");
                         layoutAdv=adv.map((el)=>{
                             title=<div className={"commentheader"}>
-                                    <span>{el.comment} <span className={"commentTitle"}>{
+                                    <span style={{fontSize:"16px"}}>{el.comment}&nbsp; &nbsp;<Tag icon={<EyeFilled />} color="rgb(154, 178, 189)">{
                                         comment.filter(elComment=>{
                                             if(elComment.disadv_id===el.id){
                                                 return elComment;
                                             }
                                         }).length
-                                    } دیدگاه</span>
+                                    } </Tag>
                                     </span>
                                     <span>
                                         <span style={{color:"blue"}}><LikeTwoTone onClick={()=>addLikeDislike("disadv_id","like",el.id)}/> {el.likes}</span>
@@ -164,7 +168,7 @@ function useForum({url, data = null}) {
                                                                 <Avatar style={{marginBottom:"8px"}} size={25} src="https://avatars.githubusercontent.com/u/4776235?s=40&v=4" />&nbsp; &nbsp;
                                                                 {elComment.first_name} {elComment.last_name} ---- {elComment.date}
                                                             </span>
-                                                            <p key={elComment.id}>&nbsp; {elComment.description}</p>
+                                                            <p style={{fontSize:"12px"}} key={elComment.id}>&nbsp; {elComment.description}</p>
                                                             <span>
                                                                 <span style={{color:"blue"}}><LikeTwoTone onClick={()=>addLikeDislike("comment_id","like",elComment.id)}/> {elComment.likes}</span>
                                                                 <span>&nbsp; &nbsp;</span>
@@ -197,13 +201,13 @@ function useForum({url, data = null}) {
                         // -------------------------------------------------------------------------------------------
                         layoutDisadv=disadv.map((el)=>{
                             title=<div className={"commentheader"}>
-                                    <span>{el.comment} <span className={"commentTitle"}>{
+                                    <span style={{fontSize:"16px"}}>{el.comment}&nbsp; &nbsp;<Tag icon={<EyeFilled />} color="rgb(154, 178, 189)">{
                                         comment.filter(elComment=>{
                                             if(elComment.disadv_id===el.id){
                                                 return elComment;
                                             }
                                         }).length
-                                    } دیدگاه</span>
+                                    } </Tag>
                                     </span>
                                     <span>
                                         <span style={{color:"blue"}}><LikeTwoTone onClick={()=>addLikeDislike("disadv_id","like",el.id)}/> {el.likes}</span>
@@ -224,7 +228,7 @@ function useForum({url, data = null}) {
                                                             <span className={"commentInfo"}>
                                                                 <Avatar style={{marginBottom:"8px"}} size={25} src="https://avatars.githubusercontent.com/u/4776235?s=40&v=4" />&nbsp; &nbsp;
                                                                 {elComment.first_name} {elComment.last_name} ---- {elComment.date}</span>
-                                                            <p key={elComment.id}>&nbsp; {elComment.description}</p>
+                                                            <p style={{fontSize:"12px"}} key={elComment.id}>&nbsp; {elComment.description}</p>
                                                             <span>
                                                                 <span style={{color:"blue"}}><LikeTwoTone onClick={()=>addLikeDislike("comment_id","like",elComment.id)}/> {elComment.likes}</span>
                                                                 <span>&nbsp; &nbsp;</span>
