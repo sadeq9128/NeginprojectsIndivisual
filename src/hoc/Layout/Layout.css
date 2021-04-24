@@ -21,7 +21,7 @@
   }
 
   #container{
-    background-image: url(../../assets/back.jpg);
+    background-image: url(../../assets/Back.jpg);
   }
   .ant-layout-content{
     background-color: transparent !important;
@@ -31,7 +31,7 @@
     height: min-content;
     margin-right: 200px;
     font-family: iranyekanwebmediumfanum;
-    background-image: url(../../assets/back.jpg);
+    background-image: url(../../assets/Back.jpg);
   }
 
   .slider{

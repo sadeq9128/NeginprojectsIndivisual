@@ -1,11 +1,18 @@
 import React,{ useState,useEffect } from "react";
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Steps } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import {Row} from 'antd';
 import axios from "../../../axios";
 import classes from "./Authenticate.module.css";
+import "./Authenticate.css";
+import logo from "../../../assets/Logo.png";
+import holes from "../../../assets/Holes.png";
+import smsPhone from "../../../assets/SmsPhone.png";
+import logoCompany from "../../../assets/LogoBime.png";
+import { SizeContextProvider } from "antd/lib/config-provider/SizeContext";
 
 
+const { Step } = Steps;
 const layout = {
     labelCol: {
         span: 8,
@@ -60,8 +67,11 @@ const Authenticate=(props)=>{
         setMinutes(0);
     }
 
-    const onFinish = (values) => {
+    const submitForm = () => {
+        let values=form.getFieldsValue();
         values["id"]=id;
+        values["code"]=code;
+        console.log(values);
         console.log(values);
         setSendingStatus(true);
         axios.post( '/login/verify',values )
@@ -78,6 +88,11 @@ const Authenticate=(props)=>{
                 console.log("خطایی رخ داد");
             } );
     };
+    let code=0;
+    const setCode=(e)=>{
+        code=e.target.value;
+    }
+
     const user = {
         fullName: 'Mostafa Jafari',
         avatar: "https://avatars2.githubusercontent.com/u/6865268?s=460&v=4",
@@ -90,39 +105,64 @@ const Authenticate=(props)=>{
         (<div>
         { minutes === 0 && seconds === 0
             ? null
-            : <h3>ارسال کد جدید تا  {minutes}:{seconds < 10 ?  `0${seconds}` : seconds}</h3> 
+            : <h4>ارسال کد جدید تا  {minutes}:{seconds < 10 ?  `0${seconds}` : seconds}</h4> 
         }
         </div>);
     }
 
     return (
         <div className={classes.cntr}>
-        <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-            <div className={classes.sectionForm}>
-            <Row>
-                <Form.Item
-                    name="code"
-                    label="کد تایید"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'کد تایید را وارد کنید',
-                        },
-                    ]}
-                >
-                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="کد تایید" />
-                </Form.Item>
-            </Row>
-                
-            <Form.Item {...tailLayout}>
+
+            <div className={classes.lefthand}>
+                <h3>ثبت نام</h3>
+                <Steps className={classes.antSteps} size="small" current={2}>
+                    <Step className={classes.antSteps} title="اطلاعات اولیه" />
+                    <Step className={classes.antSteps} title="تکمیل اطلاعات" />
+                    <Step className={classes.antSteps} title="اعتبار سنجی" />
+                    <Step className={classes.antSteps} title="اتمام ثبت نام" />
+                </Steps>
+                <img src={smsPhone} className={classes.smsPhone}/>
+                <h5>کد ارسال شده به شماره 09133959128 را وارد کنید</h5>
+                <Form form={form} name="control-hooks" onFinish={submitForm}>
+                    <div className={classes.sectionForm}>
+                        <Form.Item
+                            name="code"
+                            label="کد تایید"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'کد تایید را وارد کنید',
+                                },
+                            ]}
+                        >
+                            <Input onChange={(e)=>setCode(e)} placeholder="کد تایید" />
+                            <h3><a>اصلاح شماره</a></h3>
+                        </Form.Item>
+                    </div>
+                </Form>
                 {resendCode}
-                <Button loading={sendingStatus} className={classes.submitButton} type="primary" htmlType="submit">
-                    ثبت
-                </Button>
-            </Form.Item>
-        </div>
-            
-        </Form>
+                <div>
+                    <Button className={classes.submitButton} htmlType="submit">
+                        انصراف
+                    </Button>
+                    <Button className={classes.submitButton} type="primary" onClick={submitForm}>
+                        ثبت
+                    </Button>
+                </div>
+
+            </div>
+
+            <div className={classes.righthand}>
+                <img src={holes} className={classes.holes}/>
+                <img src={holes} className={classes.holesSecond}/>
+                <img src={logo} className={classes.logo}/>
+                <h3 className={classes.hthree}>به سیستم پیشنهاد دهی باجه خوش آمدید</h3>
+                <h2 className={classes.htwo}>لطفا جهت <a href=""><u>ارائه پیشنهاد</u></a> ثبت نام کنید</h2>
+                <div className={classes.info}>
+                    <span>طراحی و اجرا توسط شرکت بیمه نگین گهر زمین- زمستان 99<img src={logoCompany} className={classes.logoCompany}/></span>
+                </div>
+            </div>
+        
         </div>
     );
 

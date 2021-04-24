@@ -4,32 +4,102 @@
     font-family: iranyekanwebmediumfanum;
   }
 
-  .cntr{    
+  .cntr{ 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: inherit;
+  }
+    
+  .righthand{
+    padding: 30px;
+    text-align: center;
+    width: 450px;
+    height: 500px;
+    background-color: rgba(10, 10, 32, 0.6);
+    border-radius: 0px 20px 20px 0px;
+  }
+
+  .logo{
+    width: 300px;
+    height: 140px;
+  }
+
+  .logoCompany{
+    width: 20px;
+    height: 20px;
+  }
+
+  .info{
+    font-family: iranyekanwebmediumfanum !important;
+    font-size: 10px !important;
+    color: white;
+    margin-top: 150px;
+  }
+
+  .holes{
     position: absolute;
-    top: 35%;
-    left: 35%;
-    margin-top: -50px;
-    margin-left: -50px;
-    right: 35%;
+    z-index: 10000;
+    left:55%;
+    top: -10px;
+    width: 150px;
+    height: 150px;
+  }
+  .holesSecond{    
+    position: absolute;
+    z-index: 10000;
+    left: 75%;
+    top: 500px;
+    width: 150px;
+    height: 150px;
+  }
+
+  .hthree{
+    margin-top: 50px;
+    font-family: iranyekanwebmediumfanum !important;
+    font-size: 14px !important;
+    color: white;
   }
   
+  .htwo{
+    font-family: iranyekanwebmediumfanum !important;
+    font-size: 16px !important;
+    color: white;
+  }
+
+  .lefthand{
+    padding: 30px;
+    text-align: center;
+    width: 450px;
+    height: 500px;
+    background: #FFFFFF;
+    border-radius: 20px 0px 0px 20px;
+  }
+
+  .smsPhone{
+    margin-top: 60px;
+    margin-bottom: 20px;
+    width: 60px;
+    height: 75px;
+  }
+
   .submitButton{
     margin-right: 5px;
     width: 120px;
     font-family: iranyekanwebmediumfanum;
+    border-radius: 8px !important;
+    height: 45px !important;
   }
   
   .sectionForm{
-    border: 1px solid #f7f7f7;
-    box-shadow: 30px 30px 15px 7px #f0efef;
-    background-color: #f7f7f7;
     font-family: iranyekanwebmediumfanum;
-    padding: 40px;
+    display: block;
+    margin-bottom: 35px;
   }
   
   @font-face {
-    font-family: 'IRANSans';
-    src: local('IRANSans'), url(../../../assets/fonts/IRANSans.ttf) format('truetype');
+    font-family: 'iranyekanwebmediumfanum';
+    src: local('iranyekanwebmediumfanum'), url(../../../assets/fonts/iranyekanwebmediumfanum.ttf) format('truetype');
   }
   
   hr{
